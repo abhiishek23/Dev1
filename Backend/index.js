@@ -34,10 +34,10 @@ app.post("/register", async (req, res) => {
     try {
         // get all the data from the frontend  
         if (!req.body) {
-    return res.status(400).send("Request body is missing");
-}
+            return res.status(400).send("Request body is missing");
+        }
 
-const { firstname, lastname, email, password } = req.body;
+        const { firstname, lastname, email, password } = req.body;
         // check that all the data should exist
         if (!(firstname && lastname && email && password)) {
             return res.status(400).send("Please enter all the information");
@@ -97,3 +97,239 @@ const { firstname, lastname, email, password } = req.body;
 app.listen(4000, () => {
     console.log("server is listening on port 4000");
 });
+
+
+
+
+////////////////////////////////////////CRUD OPERATIONS ON PROBLEMS DATABASE////////////////////////////////////////////////
+
+/////////////////////////////////////////CREATE////////////////////////////////////////////////////////////////////
+const problem = require("./MODEL/problem.js");
+app.post("/admin/create", async (req, res) => {
+    try {
+
+        if (!req.body) {
+            return res.status(400).send("Problem Request body is missing");
+        }
+        //   ?req means request — it holds all the data sent by the client.
+        // req.body is used to get the data sent by the client in the body of the request.
+
+        const { ProblemID, Title, topics, difficulty, Description, VisibletestCase, HiddentestCase } = req.body;
+        //THE ABOVE STEP IS CALLED DESTRUCTURING  
+        if (!(ProblemID && Title && topics && difficulty && Description && VisibletestCase && HiddentestCase)) {
+            return res.status(400).send("Please enter all the information");
+        }
+
+
+        const existingid = await problem.findOne({ ProblemID });
+        if (existingid) {
+            return res.status(400).send("problem already exists with the same id");
+        }
+
+        const existingProblem = await problem.findOne({ Title });
+        if (existingProblem) {
+            return res.status(400).json({
+                message: "Problem already exists with the same title",
+                existingProblemId: existingProblem.ProblemId
+            });
+        }
+
+
+
+        // create the problem into the database 
+        const Problem = await problem.create({
+            ProblemID: ProblemID,
+            Title: Title.trim(),
+            topics: topics, // should be an array of strings
+            difficulty: difficulty,
+            Description: Description.trim(),
+            VisibletestCase: VisibletestCase, // array of objects
+            HiddentestCase: HiddentestCase    // array of objects
+        });
+
+
+        // READ ABOUT JWT - JSON WEB TOKENS
+
+        // preparing a response object without password
+        const problemResponse = {
+            id: Problem._id,
+            SecondaryID: Problem.ProblemId,
+            Title: Problem.Title,
+
+        };
+
+
+        res.status(200).json({
+            success: true,
+            message: "Problem created Successfully ",
+            response: problemResponse,
+
+        });
+    } catch (error) {
+        console.error("Problem not created ", error);
+        res.status(500).send("Server error");
+    }
+});
+
+////////////////////////////////////READING OR ACCESSING THE QUESTIONS ////////////////////////
+//get question by id 
+
+
+app.post("/findID", async (req, res) => {
+    try {
+        if (!req.body) {
+            return res.status(400).send("Problem request body is missing");
+        }
+
+        const { ProblemID } = req.body;
+
+        if (!ProblemID) {
+            return res.status(400).send("Please enter Problem ID");
+        }
+
+        const existingProblem = await problem.findOne({ ProblemID });
+
+        if (!existingProblem) {
+            return res.status(404).send("Problem does not exist with the given ID");
+        }
+
+        // Return full problem data to the frontend
+        res.status(200).json({
+            success: true,
+            message: "Problem fetched successfully",
+            problem: existingProblem
+        });
+
+    } catch (error) {
+        console.error("Problem not found", error);
+        res.status(500).send("Server error");
+    }
+});
+
+////UPDATE /////////////////////////////////////////////////////////////////////////////////////////////
+// STEP 2 - Save updated problem
+app.post("/update/save", async (req, res) => {
+    try {
+        const {
+            ProblemID,
+            Title,
+            topics,
+            difficulty,
+            Description,
+            VisibletestCase,
+            HiddentestCase
+        } = req.body;
+
+        if (!ProblemID) {
+            return res.status(400).send("Problem ID is required");
+        }
+
+        const existingProblem = await problem.findOne({ ProblemID });
+
+        if (!existingProblem) {
+            return res.status(404).send("Problem does not exist");
+        }
+
+        // Update fields
+        existingProblem.Title = Title?.trim() || existingProblem.Title;
+        existingProblem.topics = topics || existingProblem.topics;
+        existingProblem.difficulty = difficulty || existingProblem.difficulty;
+        existingProblem.Description = Description?.trim() || existingProblem.Description;
+        existingProblem.VisibletestCase = VisibletestCase || existingProblem.VisibletestCase;
+        existingProblem.HiddentestCase = HiddentestCase || existingProblem.HiddentestCase;
+
+        // Save updated document
+        const updatedProblem = await existingProblem.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Problem updated successfully",
+            updatedProblem
+        });
+
+    } catch (error) {
+        console.error("Update failed", error);
+        res.status(500).send("Server error");
+    }
+});
+
+
+
+/////////////////////////////////////////////////////////////////////////////////DELETE /////////////////////////
+app.post("/delete", async (req, res) => {
+    try {
+        const {
+            ProblemID,
+        } = req.body;
+
+        if (!ProblemID) {
+            return res.status(400).send("Problem ID is required");
+        }
+
+        const existingProblem = await problem.findOne({ ProblemID });
+
+        if (!existingProblem) {
+            return res.status(404).send("Problem does not exist");
+        }
+
+       
+     await existingProblem.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: "Problem deleted successfully",
+            
+        });
+
+    } catch (error) {
+        console.error("Delete failed", error);
+        res.status(500).send("Server error");
+    }
+});
+
+app.post("/delete-multiple", async (req, res) => {
+    try {
+        const { problemIDs, confirm } = req.body;
+
+        if (!Array.isArray(problemIDs) || problemIDs.length === 0) {
+            return res.status(400).send("An array of ProblemIDs is required");
+        }
+
+        // Step 1: Preview mode (admin has not confirmed yet)
+        if (!confirm) {
+            const problemsToDelete = await problem.find({ ProblemID: { $in: problemIDs } });
+
+            if (problemsToDelete.length === 0) {
+                return res.status(404).send("No matching problems found to preview");
+            }
+
+            // Send preview to frontend
+            return res.status(200).json({
+                success: false,
+                message: "Please confirm deletion of the following problems",
+                problems: problemsToDelete.map(p => ({
+                    ProblemID: p.ProblemID,
+                    Title: p.Title
+                }))
+            });
+        }
+
+        // Step 2: Deletion (admin has confirmed)
+        const deleteResult = await problem.deleteMany({ ProblemID: { $in: problemIDs } });
+
+        if (deleteResult.deletedCount === 0) {
+            return res.status(404).send("No matching problems found to delete");
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `${deleteResult.deletedCount} problem(s) deleted successfully`,
+        });
+
+    } catch (error) {
+        console.error("Batch delete failed", error);
+        res.status(500).send("Server error");
+    }
+});
+
+
