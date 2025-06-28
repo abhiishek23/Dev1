@@ -12,7 +12,7 @@ const outputPath = path.join(__dirname, "outputs");
 if (!fs.existsSync(outputPath)) {
     fs.mkdirSync(outputPath, { recursive: true });
 }
-const executeCpp=(filePath)=>{
+const executeCpp=(filePath,inputPath)=>{
 //  "filePath": "C:\\Users\\Abhishek\\Desktop\\Dev_Season\\compiler\\codes\\304e1c4b-db9a-4701-b704-9ef7fbd18fdb.cpp"
   const jobId = path.basename(filePath, path.extname(filePath));
     // 304e1c4b-db9a-4701-b704-9ef7fbd18fdb.cpp"
@@ -21,7 +21,8 @@ const executeCpp=(filePath)=>{
 
         return new Promise((resolve, reject) => {
         exec(
-            `g++ ${filePath} -o ${outPath} && cd ${outputPath} && .\\${jobId}.exe`,
+            `g++ ${filePath} -o ${outPath} && cd ${outputPath} && .\\${jobId}.exe < ${inputPath}`,
+            //with the addition of last line the compiler starts accepting user input 
             (error, stdout, stderr) => {
                 if (error) {
                     reject({ error, stderr });
