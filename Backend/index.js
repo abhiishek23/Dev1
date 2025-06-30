@@ -17,6 +17,7 @@ const User = require("./MODEL/user.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken"); // required to use jwt for token generation
 const dotenv = require("dotenv");
+const { aiCodeReview } = require('./aiCodeReview');
 dotenv.config()
 
 // ✅ Middleware to parse JSON
@@ -331,5 +332,19 @@ app.post("/delete-multiple", async (req, res) => {
         res.status(500).send("Server error");
     }
 });
+
+app.post("/ai", async (req, res) => {
+    const { code } = req.body;
+    if (code === undefined) {
+        return res.status(404).json({ success: false, error: "Empty code!" });
+    }
+    try {
+        const review = await aiCodeReview(code);
+        res.json({ "review": review });
+    } catch (error) {
+        res.status(500).json({ error: "Error in AI review, error: " + error.message });
+    }
+});
+
 
 
