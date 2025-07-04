@@ -18,6 +18,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken"); // required to use jwt for token generation
 const dotenv = require("dotenv");
 const { aiCodeReview } = require('./aiCodeReview');
+const { aiErrorAnalysis } = require('./aiErrorAnalysis');
 dotenv.config()
 
 // ✅ Middleware to parse JSON
@@ -38,9 +39,9 @@ app.post("/register", async (req, res) => {
             return res.status(400).send("Request body is missing");
         }
 
-        const { firstname, lastname, email, password } = req.body;
+        const { firstname, lastname, email, password ,userId } = req.body;
         // check that all the data should exist
-        if (!(firstname && lastname && email && password)) {
+        if (!(firstname && lastname && email && password && userId)) {
             return res.status(400).send("Please enter all the information");
         }
 
@@ -48,6 +49,11 @@ app.post("/register", async (req, res) => {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).send("User already exists with the same email");
+        }
+
+         const existingUser2 = await User.findOne({ userId });
+        if (existingUser2) {
+            return res.status(400).send("User already exists with the same id");
         }
 
         // hashing the password 
@@ -60,6 +66,8 @@ app.post("/register", async (req, res) => {
             lastname: lastname.trim(),
             email: email.toLowerCase().trim(),
             password: hashedPassword,
+            userId: userId.trim()
+
         });
 
         // READ ABOUT JWT - JSON WEB TOKENS
@@ -345,6 +353,42 @@ app.post("/ai", async (req, res) => {
         res.status(500).json({ error: "Error in AI review, error: " + error.message });
     }
 });
+
+
+
+app.post("/errorAnalysis", async (req, res) => {
+    const { userId } = req.body;
+
+    if (!userId) {
+        return res.status(400).json({ success: false, error: "User ID is required" });
+    }
+
+    try {
+       
+        const user = await User.findOne({ userId }); 
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: "User not found" });
+        }
+
+        const history = user.errorHistory;
+
+        if (!history || history.length === 0) {
+            return res.status(404).json({ success: false, error: "No error history found" });
+        }
+
+        
+        const review = await aiErrorAnalysis(history);
+
+       
+        res.json({ success: true, review });
+
+    } catch (error) {
+        console.error("Error analyzing error history:", error);
+        res.status(500).json({ success: false, error: "Internal server error" });
+    }
+});
+
 
 
 

@@ -26,7 +26,16 @@ const userSchema = new mongoose.Schema({
         minlength: [2, "Last name must be at least 2 characters long"],
         maxlength: [50, "Last name cannot exceed 50 characters"]
     },
-    
+    //USER ID SHOULD BE UNIQUE ACROSS ALL USERS 
+        userId: {
+        type: String,
+        default: null,
+        unique: true,
+        required: [true, " required"],
+        trim: true,
+        minlength: [5, "Last name must be at least 2 characters long"],
+        maxlength: [50, "Last name cannot exceed 50 characters"]
+    },
     // User's email address - must be unique across all users
     email: {
         type: String,
@@ -46,6 +55,22 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         minlength: [6, "Password must be at least 6 characters long"]
     },
+
+    errorHistory: [
+    {
+      code: String,
+      language: String , 
+      error: String,
+      topics: Array,
+      difficulty:String,
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+    }
+  ]
+
+
     
     // Add timestamp fields for tracking when user was created/updated
 }, {
