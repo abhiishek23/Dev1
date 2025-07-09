@@ -19,6 +19,7 @@ const jwt = require("jsonwebtoken"); // required to use jwt for token generation
 const dotenv = require("dotenv");
 const { aiCodeReview } = require('./aiCodeReview');
 const { aiErrorAnalysis } = require('./aiErrorAnalysis');
+const createContest = require("./createContest"); 
 dotenv.config()
 
 // ✅ Middleware to parse JSON
@@ -387,6 +388,13 @@ app.post("/errorAnalysis", async (req, res) => {
         console.error("Error analyzing error history:", error);
         res.status(500).json({ success: false, error: "Internal server error" });
     }
+});
+
+
+
+app.post("/create-contest", async (req, res) => {
+  const result = await createContest(req.body);
+  res.status(result.success ? 201 : 400).json(result);
 });
 
 

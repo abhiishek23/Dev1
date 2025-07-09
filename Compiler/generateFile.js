@@ -1,3 +1,6 @@
+
+
+
 const fs = require("fs");
 //fs is file system module and it helps to interact with file system 
 //this is not in npm it comes with javascript 
@@ -10,8 +13,8 @@ const { v4: uuid } = require('uuid');
 // v4
 // etc.
 // Get the v4 function from the uuid module
-// Store it in a local variable called uuid
-
+// Store it in a local variable called uuid 
+const { manageDirectorySize } = require("./manageDirectorySize");
 
 const dirCodes = path.join(__dirname, "codes") //C:\Users\Abhishek\Desktop\Dev_Season\Compiler\codes 
 //here __ dirname is default
@@ -39,7 +42,12 @@ const generateFile = (language, code) => {
   const filename = `${jobId}.${language}`;
   const filePath = path.join(dirCodes, filename);
   fs.writeFileSync(filePath, code);
+
+//  Simplified file cleanup using shared utility
+  manageDirectorySize(dirCodes, 10);
+
   return filePath;
 }
 
 module.exports = { generateFile }
+
