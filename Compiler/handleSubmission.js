@@ -12,11 +12,6 @@ const { executeJava } = require('./executeJava');
 const { executePython } = require('./executePython'); 
 const { executeJs } = require('./executeJs'); 
 const { executeGo } = require('./executeGo');
-
-
-
-
-
 const problemModel = require("../Backend/MODEL/problem");
 const User = require("../Backend/MODEL/user");
 
@@ -24,9 +19,9 @@ const User = require("../Backend/MODEL/user");
 
 
 async function handleSubmission(reqBody) {
-  const { language = 'cpp', code, problemID, userId, topics = [], difficulty = null } = reqBody;
+  const { language = 'cpp', code, ProblemID, userId, topics = [], difficulty = null } = reqBody;
 
-  if (!code || !problemID) {
+  if (!code || !ProblemID) {
     return {
       status: 400,
       body: { success: false, error: "Missing code or problemID" }
@@ -35,7 +30,7 @@ async function handleSubmission(reqBody) {
 
   try {
     const filePath = generateFile(language, code);
-    const problem = await problemModel.findOne({ ProblemID: problemID });
+    const problem = await problemModel.findOne({ ProblemID: ProblemID });
 
     if (!problem) {
       return {
@@ -94,31 +89,33 @@ async function handleSubmission(reqBody) {
     };
 
   } catch (error) {
+ const errMsg = error ;
+    const stderr = error.stderr?.toString?.() || error.message || "Unknown error";
+
     try {
       if (userId) {
-        await User.findOneAndUpdate(
-          { userId },
+        await User.updateOne(
+          { userId: new RegExp(`^${userId}$`, "i") },
           {
             $push: {
               errorHistory: {
-                code,
-                language,
-                error: error?.message || error || "Unknown error",
-                topics,
-                difficulty,
-              }
-            }
+                code: String(code),
+                language: String(language),
+                error: stderr,
+                topics: Array.isArray(topics) ? topics.map(String) : [],
+                difficulty: String(difficulty || ""),
+              },
+            },
           }
         );
+        console.log("📌 Error logged for user:", userId);
       }
     } catch (logErr) {
-      console.error("⚠️ Error logging to errorHistory:", logErr?.message || logErr);
+      console.error("⚠️ Failed to log error to DB:", logErr?.message);
     }
-
-    return {
-      status: 500,
-      body: { error: error?.message || "Server Error" }
-    };
+//sending std error in response 
+ 
+    res.status(500).json({ success: false,  stderr  });
   }
 }
 

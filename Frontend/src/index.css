@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Make sure the body doesn't overlap the navbar */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure main content respects navbar height */
+#root {
+  padding-top: 80px; /* Adjust if your navbar height is different */
+}
+
+/* Optional: Set background and font defaults */
+html, body {
+  background-color: #f9f9f9;
+  font-family: 'Inter', sans-serif;
+}

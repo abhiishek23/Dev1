@@ -21,6 +21,13 @@ const { DBconnection } = require("../Backend/Database/db");
 const problemModel = require("../Backend/MODEL/problem");
 const User = require("../Backend/MODEL/user");
 const submitContest = require("./submitContest"); 
+// dotenv.config()
+const cors = require("cors"); 
+//Cross origin resource sharing 
+app.use(cors({
+  origin: "http://localhost:5173", // Your frontend's URL
+  credentials: true, // If using cookies or auth headers
+}));
 
 // Connect to DB
 DBconnection();
@@ -33,20 +40,27 @@ app.get("/", (req, res) => {
     res.send("server working fine");
 });
 
+
+const getErrorMessage = (err) => {
+  if (!err) return "Unknown error";
+  if (typeof err === "string") return err;
+  if (err instanceof Error) return err.message;
+  if (typeof err === "object") return err.message || JSON.stringify(err);
+  return String(err);
+};
+
 app.post("/run", async (req, res) => {
-  const { language, code, input = '', userId, topics = [], difficulty = null } = req.body;
+  const { language, code, input = '', userId, topics = [], difficulty = "" } = req.body;
 
   if (!code) {
     return res.status(400).json({ success: false, error: "Empty code!" });
   }
 
   try {
-    console.log("🔧 Generating file for language:", language);
     const filePath = generateFile(language, code);
     const inputPath = await generateInputFile(input);
     let output;
 
-    console.log("⚙️ Executing code...");
     if (language === 'cpp') {
       output = await executeCpp(filePath, inputPath);
     } else if (language === 'c') {
@@ -63,37 +77,36 @@ app.post("/run", async (req, res) => {
       return res.status(400).json({ error: "Unsupported language" });
     }
 
-    console.log("✅ Execution complete");
-    res.json({ filePath, inputPath, output });
+    return res.json({ output });
 
   } catch (error) {
-    console.error("❌ Error during run:", error?.message || error || "Unknown error");
+    const errMsg = error ;
+    const stderr = error.stderr?.toString?.() || error.message || "Unknown error";
 
     try {
       if (userId) {
-        await User.findOneAndUpdate(
-          { userId },
+        await User.updateOne(
+          { userId: new RegExp(`^${userId}$`, "i") },
           {
             $push: {
               errorHistory: {
-                code,
-                language,
-                error: error?.message || error || "Unknown error",
-                topics,
-                difficulty,
-              }
-            }
+                code: String(code),
+                language: String(language),
+                error: stderr,
+                topics: Array.isArray(topics) ? topics.map(String) : [],
+                difficulty: String(difficulty || ""),
+              },
+            },
           }
         );
-        console.log("📌 Error logged to user history");
+        console.log("📌 Error logged for user:", userId);
       }
     } catch (logErr) {
-      console.error("⚠️ Error logging to errorHistory:", logErr?.message || logErr);
+      console.error("⚠️ Failed to log error to DB:", logErr?.message);
     }
-
-    res.status(500).json({
-      error: error?.message || error || "Server Error",
-    });
+//sending std error in response 
+ 
+    res.status(500).json({ success: false,  stderr  });
   }
 });
 

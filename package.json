@@ -1,5 +1,22 @@
 {
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run compiler\"",
+    "server": "cd Backend && node index.js",
+    "client": "cd Frontend && npm run dev",
+    "compiler": "cd Compiler && node index.js"
+  },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.4",
+    "@reduxjs/toolkit": "^2.8.2",
+    "@uiw/react-codemirror": "^4.24.1",
+    "react-redux": "^9.2.0",
     "web-vitals": "^5.0.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "vite": "^7.0.4"
   }
 }
