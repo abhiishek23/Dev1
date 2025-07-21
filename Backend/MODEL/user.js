@@ -179,6 +179,9 @@ const userSchema = new mongoose.Schema({
     }
   }
 ] ,
+   friends: { type: [String], default: [] },
+  friendRequestsSent: { type: [String], default: [] },
+  friendRequestsReceived: { type: [String], default: [] },
 
 
     // WasStruck - array containing all question ids in which the user was struck

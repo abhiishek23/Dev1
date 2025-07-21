@@ -445,6 +445,38 @@ app.post("/ai", async (req, res) => {
     }
 });
 
+const { aiCompare } = require("./aiCompare"); // adjust path as needed
+
+app.post("/compare", async (req, res) => {
+    const { userId1, userId2 } = req.body;
+
+    if (!userId1 || !userId2) {
+        return res.status(400).json({ success: false, error: "Please provide both userId1 and userId2" });
+    }
+
+    try {
+        const analysis = await aiCompare(userId1, userId2);
+        res.json({ success: true, analysis });
+    } catch (error) {
+        console.error("AI comparison error:", error);
+        res.status(500).json({ success: false, error: "Error in AI comparison: " + error.message });
+    }
+});
+app.get("/user/:userId/friends", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findOne({ userId });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    res.json({ success: true, friends: user.friends });
+  } catch (err) {
+    console.error("Error fetching friends:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+
 
 
 app.post("/errorAnalysis", async (req, res) => {
@@ -571,6 +603,8 @@ app.get("/api/problem/:problemID", async (req, res) => {
                 topics: 1,
                 _id: 1,
                 __v: 1,
+                contestId:1 
+                
             }
         );
 
@@ -613,7 +647,6 @@ app.get("/api/contests", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
 app.get("/api/contest/:contestId", async (req, res) => {
     try {
         const contest = await Contest.findOne({ contestId: req.params.contestId });
@@ -651,4 +684,130 @@ app.get("/api/contest/:contestId", async (req, res) => {
             message: "Server error"
         });
     }
+});
+
+// Send a friend request
+app.post("/friend-request/send", async (req, res) => {
+  const { fromUserId, toUserId } = req.body;
+
+  if (fromUserId === toUserId) {
+    return res.status(400).json({ success: false, message: "Cannot send request to yourself" });
+  }
+
+  try {
+    const fromUser = await User.findOne({ userId: fromUserId });
+    const toUser = await User.findOne({ userId: toUserId });
+
+    if (!fromUser || !toUser) {
+      return res.status(404).json({ success: false, message: "User(s) not found" });
+    }
+
+    // Ensure arrays are initialized
+    fromUser.friendRequestsSent = fromUser.friendRequestsSent || [];
+    toUser.friendRequestsReceived = toUser.friendRequestsReceived || [];
+
+    // Check for duplicate requests
+    if (
+      fromUser.friendRequestsSent.includes(toUserId) ||
+      toUser.friendRequestsReceived.includes(fromUserId)
+    ) {
+      return res.status(400).json({ success: false, message: "Request already sent" });
+    }
+
+    fromUser.friendRequestsSent.push(toUserId);
+    toUser.friendRequestsReceived.push(fromUserId);
+
+    await fromUser.save();
+    await toUser.save();
+
+    res.json({ success: true, message: "Friend request sent" });
+
+  } catch (err) {
+    console.error("Error sending friend request:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Accept a friend request
+app.post("/friend-request/accept", async (req, res) => {
+  try {
+    const { fromUserId, toUserId } = req.body;
+
+    if (!fromUserId || !toUserId) {
+      return res.status(400).json({ success: false, message: "Invalid user IDs" });
+    }
+
+    const fromUser = await User.findOne({ userId: fromUserId });
+    const toUser = await User.findOne({ userId: toUserId });
+
+    if (!fromUser || !toUser) {
+      return res.status(404).json({ success: false, message: "User(s) not found" });
+    }
+
+    if (!toUser.friendRequestsReceived.includes(fromUserId)) {
+      return res.status(400).json({ success: false, message: "No such request to accept" });
+    }
+
+    // Remove request
+    toUser.friendRequestsReceived = toUser.friendRequestsReceived.filter(id => id !== fromUserId);
+    fromUser.friendRequestsSent = fromUser.friendRequestsSent.filter(id => id !== toUserId);
+
+    // Add to mutual friends
+    toUser.friends.push(fromUserId);
+    fromUser.friends.push(toUserId);
+
+    await toUser.save();
+    await fromUser.save();
+
+    res.status(200).json({ success: true, message: "Friend request accepted" });
+  } catch (error) {
+    console.error("Error accepting friend request:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Decline a friend request
+app.post("/friend-request/decline", async (req, res) => {
+  try {
+    const { fromUserId, toUserId } = req.body;
+
+    if (!fromUserId || !toUserId) {
+      return res.status(400).json({ success: false, message: "Invalid user IDs" });
+    }
+
+    const fromUser = await User.findOne({ userId: fromUserId });
+    const toUser = await User.findOne({ userId: toUserId });
+
+    if (!fromUser || !toUser) {
+      return res.status(404).json({ success: false, message: "User(s) not found" });
+    }
+
+    if (!toUser.friendRequestsReceived.includes(fromUserId)) {
+      return res.status(400).json({ success: false, message: "No such request to decline" });
+    }
+
+    toUser.friendRequestsReceived = toUser.friendRequestsReceived.filter(id => id !== fromUserId);
+    fromUser.friendRequestsSent = fromUser.friendRequestsSent.filter(id => id !== toUserId);
+
+    await toUser.save();
+    await fromUser.save();
+
+    res.status(200).json({ success: true, message: "Friend request declined" });
+  } catch (error) {
+    console.error("Error declining friend request:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+app.get("/user/:userId/friendRequests", async (req, res) => {
+  try {
+    const user = await User.findOne({ userId: req.params.userId });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.json({ success: true, friendRequests: user.friendRequestsReceived || [] });
+  } catch (error) {
+    console.error("Error fetching friend requests:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
 });
