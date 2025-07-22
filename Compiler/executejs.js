@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
 
-const executeJs = (filePath, inputPath) => {
+const executejs = (filePath, inputPath) => {
     return new Promise((resolve, reject) => {
         const command = inputPath
             ? `node ${filePath} < ${inputPath}`
@@ -21,5 +21,5 @@ const executeJs = (filePath, inputPath) => {
 };
 
 module.exports = {
-    executeJs,
+    executejs,
 };

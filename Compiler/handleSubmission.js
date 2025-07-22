@@ -10,7 +10,7 @@ const { executeCpp } = require('./executeCpp');
 const { executeC } = require('./executeC'); 
 const { executeJava } = require('./executeJava'); 
 const { executePython } = require('./executePython'); 
-const { executeJs } = require('./executeJs'); 
+const { executejs } = require('./executejs'); 
 const { executeGo } = require('./executeGo');
 const problemModel = require("../Backend/MODEL/problem");
 const User = require("../Backend/MODEL/user");
@@ -52,7 +52,7 @@ async function handleSubmission(reqBody) {
         else if (language === 'c') output = await executeC(filePath, inputPath);
         else if (language === 'java') output = await executeJava(filePath, inputPath);
         else if (language === 'py' || language === 'python') output = await executePython(filePath, inputPath);
-        else if (language === 'js' || language === 'javascript') output = await executeJs(filePath, inputPath);
+        else if (language === 'js' || language === 'javascript') output = await executejs(filePath, inputPath);
         else if (language === 'go' || language === 'golang') output = await executeGo(filePath, inputPath);
         else return { status: 400, body: { error: "Unsupported language" } };
       } catch (err) {

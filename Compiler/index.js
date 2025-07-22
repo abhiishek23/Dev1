@@ -10,7 +10,7 @@ const { executeCpp } = require('./executeCpp');
 const { executeC } = require('./executeC'); 
 const { executeJava } = require('./executeJava'); 
 const { executePython } = require('./executePython'); 
-const { executeJs } = require('./executeJs'); 
+const { executejs } = require('./executejs'); 
 const { executeGo } = require('./executeGo');
 
 require("dotenv").config({ path: "../Backend/.env" });
@@ -70,7 +70,7 @@ app.post("/run", async (req, res) => {
     } else if (language === 'py' || language === 'python') {
       output = await executePython(filePath, inputPath);
     } else if (language === 'js' || language === 'javascript') {
-      output = await executeJs(filePath, inputPath);
+      output = await executejs(filePath, inputPath);
     } else if (language === 'go' || language === 'golang') {
       output = await executeGo(filePath, inputPath);
     } else {

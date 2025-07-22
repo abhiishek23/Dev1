@@ -193,6 +193,75 @@ app.post("/signup", async (req, res) => {
 
 /////////////////////////////////////////CREATE////////////////////////////////////////////////////////////////////
 const problem = require("./MODEL/problem.js");
+// app.post("/admin/create", async (req, res) => {
+//     try {
+//         if (!req.body) {
+//             return res.status(400).send("Problem Request body is missing");
+//         }
+
+//         const {
+//             ProblemID,
+//             Title,
+//             topics,
+//             difficulty,
+//             Description,
+//             VisibletestCase,
+//             HiddentestCase,
+//             inputFormat,
+//             outputFormat,
+//             InvisibleTime, // ✅ Accepting InvisibleTime optionally
+//             Solution
+
+//         } = req.body;
+
+//         if (!(ProblemID && Title && topics && difficulty && Description && VisibletestCase && HiddentestCase && inputFormat && outputFormat)) {
+//             return res.status(400).send("Please enter all the information");
+//         }
+
+//         const existingid = await problem.findOne({ ProblemID });
+//         if (existingid) {
+//             return res.status(400).send("problem already exists with the same id");
+//         }
+
+//         const existingProblem = await problem.findOne({ Title });
+//         if (existingProblem) {
+//             return res.status(400).json({
+//                 message: "Problem already exists with the same title",
+//                 existingProblemId: existingProblem.ProblemId,
+//             });
+//         }
+
+//         const Problem = await problem.create({
+//             ProblemID: ProblemID,
+//             Title: Title.trim(),
+//             topics: topics,
+//             difficulty: difficulty,
+//             Description: Description.trim(),
+//             VisibletestCase: VisibletestCase,
+//             HiddentestCase: HiddentestCase,
+//             inputFormat: inputFormat.trim(),
+//             outputFormat: outputFormat.trim(),
+//             InvisibleTime: InvisibleTime || null, // ✅ Set to null if not provided
+//             Solution:Solution 
+//         });
+
+//         const problemResponse = {
+//             id: Problem._id,
+            
+//             Title: Problem.Title,
+//         };
+
+//         res.status(200).json({
+//             success: true,
+//             message: "Problem created Successfully",
+//             response: problemResponse,
+//         });
+
+//     } catch (error) {
+//         console.error("Problem not created", error);
+//         res.status(500).send("Server error");
+//     }
+// });
 app.post("/admin/create", async (req, res) => {
     try {
         if (!req.body) {
@@ -209,9 +278,9 @@ app.post("/admin/create", async (req, res) => {
             HiddentestCase,
             inputFormat,
             outputFormat,
-            InvisibleTime, // ✅ Accepting InvisibleTime optionally
-            Solution
-
+            InvisibleTime,
+            Solution,
+            contestId  // ✅ Accept contestId optionally
         } = req.body;
 
         if (!(ProblemID && Title && topics && difficulty && Description && VisibletestCase && HiddentestCase && inputFormat && outputFormat)) {
@@ -220,7 +289,7 @@ app.post("/admin/create", async (req, res) => {
 
         const existingid = await problem.findOne({ ProblemID });
         if (existingid) {
-            return res.status(400).send("problem already exists with the same id");
+            return res.status(400).send("Problem already exists with the same id");
         }
 
         const existingProblem = await problem.findOne({ Title });
@@ -241,14 +310,15 @@ app.post("/admin/create", async (req, res) => {
             HiddentestCase: HiddentestCase,
             inputFormat: inputFormat.trim(),
             outputFormat: outputFormat.trim(),
-            InvisibleTime: InvisibleTime || null, // ✅ Set to null if not provided
-            Solution:Solution 
+            InvisibleTime: InvisibleTime || null,
+            Solution: Solution,
+            contestId: contestId ? contestId.trim() : null  // ✅ Set contestId if provided, else null
         });
 
         const problemResponse = {
             id: Problem._id,
-            
             Title: Problem.Title,
+            contestId: Problem.contestId || null
         };
 
         res.status(200).json({

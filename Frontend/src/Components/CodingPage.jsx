@@ -102,42 +102,50 @@ const CodingPage = () => {
     return true;
   };
 
-  const handleSubmit = async () => {
-    if (!handleAuthCheck()) return;
-    try {
-      setLoadingAction("submit");
-      const now = Date.now();
-      const invisibleEnd = new Date(problemData?.InvisibleTime?.end).getTime();
+const handleSubmit = async () => {
+  if (!handleAuthCheck()) return;
 
-      const payload = {
-        language: languageMap[language],
-        code,
-        userId,
-        topics: problemData?.topics || [],
-        difficulty: problemData?.difficulty || null,
-      };
+  try {
+    setLoadingAction("submit");
 
-      if (now > invisibleEnd) {
-        await axios.post("http://localhost:7000/submit", { ...payload, ProblemID: problemID });
-        setOutputResponse("Submit Success");
-      } else {
-        await axios.post("http://localhost:7000/submit-contest", {
-          ...payload,
-          contestId: problemData?.contestId,
-          problemID: problemID,
-        });
-        setOutputResponse("Contest Submit Success");
-      }
+    const res = await axios.post("http://localhost:7000/submit-contest", {
+      language: languageMap[language],
+      code,
+      input: "",
+      userId,
+      topics: problemData?.topics || [],
+      difficulty: problemData?.difficulty || "",
+      ProblemID: problemData?.ProblemID
+    });
 
-      setActiveTab("Output");
-    } catch (err) {
-      console.error(err);
-      setOutputResponse("Submit Error");
-      setActiveTab("Output");
-    } finally {
-      setLoadingAction("");
+    const { success, message, verdict, results, error } = res.data;
+
+    if (success) {
+      const outputText = `
+✅ Verdict: ${verdict}
+📬 Message: ${message}
+🧾 Results: ${JSON.stringify(results, null, 2)}
+      `;
+      setOutputResponse(outputText.trim());
+    } else {
+      setOutputResponse(`❌ Submission Failed: ${error || "Unknown error."}`);
     }
-  };
+
+    setActiveTab("Output");
+  } catch (err) {
+    console.error(err);
+
+    const stderr =
+      err.response?.data?.stderr || err.response?.data?.error || err.message || "Unknown error";
+
+    setOutputResponse(`❌ Error: ${stderr}`);
+    setActiveTab("Output");
+  } finally {
+    setLoadingAction("");
+  }
+};
+
+
 
 const handleRun = async () => {
   if (!handleAuthCheck()) return;
@@ -321,3 +329,11 @@ const handleRun = async () => {
 };
 
 export default CodingPage;
+
+
+
+
+
+
+
+
