@@ -319,6 +319,7 @@ app.post("/admin/create", async (req, res) => {
             id: Problem._id,
             Title: Problem.Title,
             contestId: Problem.contestId || null
+            
         };
 
         res.status(200).json({
@@ -878,6 +879,21 @@ app.get("/user/:userId/friendRequests", async (req, res) => {
     res.json({ success: true, friendRequests: user.friendRequestsReceived || [] });
   } catch (error) {
     console.error("Error fetching friend requests:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+
+// routes/contest.js
+app.get("/contest/:contestId/leaderboard", async (req, res) => {
+  const { contestId } = req.params;
+  try {
+    const contest = await Contest.findOne({ contestId });
+    if (!contest)
+      return res.status(404).json({ success: false, message: "Contest not found" });
+
+    res.json({ success: true, leaderboard: contest.leaderboard });
+  } catch (err) {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });

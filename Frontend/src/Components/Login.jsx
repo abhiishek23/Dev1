@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../Features/userSlice.js";
 import axios from "axios";
 
-const Login = () => {
+const LoginPage = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [userId, setUserId] = useState("");
@@ -48,59 +48,61 @@ const Login = () => {
   };
 
   return (
-    <div className="login p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
-      <form className="login_form flex flex-col gap-4" onSubmit={handleSubmit}>
-        <h1 className="text-xl font-bold mb-2">Register Here</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="p-6 w-full max-w-md bg-white rounded-lg shadow-md mx-auto">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <h1 className="text-xl font-bold mb-2 text-center">Register Here</h1>
 
-        <input
-          type="text"
-          placeholder="First Name"
-          value={firstname}
-          onChange={(e) => setFirstname(e.target.value)}
-          className="border p-2 rounded"
-        />
+          <input
+            type="text"
+            placeholder="First Name"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            className="border p-2 rounded"
+          />
 
-        <input
-          type="text"
-          placeholder="Last Name"
-          value={lastname}
-          onChange={(e) => setLastname(e.target.value)}
-          className="border p-2 rounded"
-        />
+          <input
+            type="text"
+            placeholder="Last Name"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            className="border p-2 rounded"
+          />
 
-        <input
-          type="text"
-          placeholder="User ID"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          className="border p-2 rounded"
-        />
+          <input
+            type="text"
+            placeholder="User ID"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            className="border p-2 rounded"
+          />
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 rounded"
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border p-2 rounded"
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 rounded"
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 rounded"
+          />
 
-        <button
-          type="submit"
-          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
-        >
-          Submit
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

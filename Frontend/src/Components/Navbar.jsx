@@ -17,14 +17,13 @@ function Navbar() {
               <Link to="/" className="text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Home</Link>
               <Link to="/problems" className="text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Problems</Link>
               <Link to="/contests" className="text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Contests</Link>
-              <Link to="/contact" className="text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Contact</Link>
             </div>
           </div>
 
           <div className="flex items-center">
             <div className="hidden md:ml-4 md:flex md:items-center md:space-x-4">
-              <Link to="/login" className="text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Login</Link>
-              <Link to="/signup" className="bg-white text-indigo-600 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-100">Sign Up</Link>
+              <Link to="/login" className="text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">SignUp</Link>
+              <Link to="/signup" className="bg-white text-indigo-600 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-100">Login</Link>
             </div>
 
             <div className="flex items-center md:hidden">
@@ -49,7 +48,6 @@ function Navbar() {
             <Link to="/" className="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Home</Link>
             <Link to="/problems" className="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Problems</Link>
             <Link to="/contests" className="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Contests</Link>
-            <Link to="/contact" className="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Contact</Link>
             <div className="pt-4 pb-3 border-t border-gray-700">
               <div className="px-5">
                 <Link to="/login" className="block w-full text-center text-white bg-gray-700 px-3 py-2 rounded-md text-base font-medium hover:bg-gray-600">Login</Link>

@@ -1,24 +1,34 @@
-// const Contest = require("../Backend/MODEL/contest"); // Adjust the path if needed
-// const { handleSubmission } = require("./handleSubmission"); // Correctly import
+
+// const Contest = require("../Backend/MODEL/contest");
+// const problemModel = require("../Backend/MODEL/problem");
+// const { handleSubmission } = require("./handleSubmission");
 
 // const submitContest = async ({
-//   contestId,
-//  ProblemID,
+//   ProblemID,
 //   userId,
 //   language = 'cpp',
 //   code,
 //   topics = [],
 //   difficulty = null
 // }) => {
-//   if (!contestId || !ProblemID || !userId || !code) {
-//     return { success: false, error: "Missing contestId,ProblemID, userId, or code." };
+//   if (!ProblemID || !userId || !code) {
+//     return { success: false, error: "Missing ProblemID, userId, or code." };
 //   }
 
 //   try {
 //     console.log("📥 Starting normal submission...");
 
-//     // 🛠 Call handleSubmission correctly and destructure from result.body
-//     const result = await handleSubmission({ language, code,ProblemID, userId, topics, difficulty });
+//     // Fetch problem using ProblemID to get contestId
+//     const problemDoc = await problemModel.findOne({ ProblemID });
+
+//     if (!problemDoc || !problemDoc.contestId) {
+//       return { success: false, error: "Problem not found or contestId missing in problem." };
+//     }
+
+//     const contestId = problemDoc.contestId;
+
+//     // Evaluate submission
+//     const result = await handleSubmission({ language, code, ProblemID, userId, topics, difficulty });
 
 //     if (!result || typeof result.body?.verdict === "undefined") {
 //       return { success: false, error: "Failed to evaluate submission" };
@@ -45,7 +55,7 @@
 //     });
 
 //     if (isWithinTime) {
-//       const problemEntry = contest.problems.find(p => p.ProblemID ===ProblemID);
+//       const problemEntry = contest.problems.find(p => p.ProblemID === ProblemID);
 
 //       if (!problemEntry) {
 //         return { success: false, error: `Problem ${ProblemID} not part of this contest` };
@@ -69,7 +79,7 @@
 
 //       // Append this submission
 //       participant.submissions.push({
-//    ProblemID,
+//         ProblemID,
 //         submittedAt: now,
 //         verdict,
 //         pointsEarned
@@ -112,6 +122,8 @@
 // };
 
 // module.exports = submitContest;
+
+
 const Contest = require("../Backend/MODEL/contest");
 const problemModel = require("../Backend/MODEL/problem");
 const { handleSubmission } = require("./handleSubmission");
@@ -132,7 +144,7 @@ const submitContest = async ({
     console.log("📥 Starting normal submission...");
 
     // Fetch problem using ProblemID to get contestId
-    const problemDoc = await problemModel.findOne({ ProblemID });
+    const problemDoc = await problemModel.findOne({ ProblemID: Number(ProblemID) });
 
     if (!problemDoc || !problemDoc.contestId) {
       return { success: false, error: "Problem not found or contestId missing in problem." };
@@ -141,14 +153,20 @@ const submitContest = async ({
     const contestId = problemDoc.contestId;
 
     // Evaluate submission
-    const result = await handleSubmission({ language, code, ProblemID, userId, topics, difficulty });
+    const result = await handleSubmission({
+      language,
+      code,
+      ProblemID: Number(ProblemID),
+      userId,
+      topics,
+      difficulty
+    });
 
     if (!result || typeof result.body?.verdict === "undefined") {
       return { success: false, error: "Failed to evaluate submission" };
     }
 
     const { verdict, results } = result.body;
-
     console.log("✅ Submission result:", verdict);
 
     const contest = await Contest.findOne({ contestId });
@@ -167,12 +185,15 @@ const submitContest = async ({
       isWithinTime
     });
 
-    if (isWithinTime) {
-      const problemEntry = contest.problems.find(p => p.ProblemID === ProblemID);
+     if (isWithinTime) {
+  const problemEntry = contest.problems.find(
+    (p) => Number(p.problemID) === Number(ProblemID)  // ✅ correct field name here
+  );
 
-      if (!problemEntry) {
-        return { success: false, error: `Problem ${ProblemID} not part of this contest` };
-      }
+  if (!problemEntry) {
+    return { success: false, error: `Problem ${ProblemID} not part of this contest` };
+  }
+
 
       const pointsForProblem = problemEntry.points || 0;
       const pointsEarned = verdict === "Accepted" ? pointsForProblem : 0;
@@ -192,7 +213,7 @@ const submitContest = async ({
 
       // Append this submission
       participant.submissions.push({
-        ProblemID,
+        problemID: Number(ProblemID),
         submittedAt: now,
         verdict,
         pointsEarned

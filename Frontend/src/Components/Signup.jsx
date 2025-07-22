@@ -44,41 +44,43 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
-      <form className="signup_form flex flex-col gap-4" onSubmit={handleSubmit}>
-        <h1 className="text-xl font-bold mb-2">Sign Up Here</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="signup p-6 max-w-md w-full mx-auto bg-white rounded-lg shadow-md">
+        <form className="signup_form flex flex-col gap-4" onSubmit={handleSubmit}>
+          <h1 className="text-xl font-bold mb-2 text-center">Sign Up Here</h1>
 
-        <input
-          type="text"
-          placeholder="User ID"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          className="border p-2 rounded"
-        />
+          <input
+            type="text"
+            placeholder="User ID"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            className="border p-2 rounded"
+          />
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 rounded"
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border p-2 rounded"
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 rounded"
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 rounded"
+          />
 
-        <button
-          type="submit"
-          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
-        >
-          Submit
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
