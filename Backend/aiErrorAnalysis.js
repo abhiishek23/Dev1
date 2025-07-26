@@ -8,7 +8,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 const aiErrorAnalysis = async (history) => {
     const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
-        contents: "Analyze the following history of errors made by the user  and provide a medium sized detailed analysis of the errors user frequently commits and how he can improve this , also tell the topics he often fails and the difficulty level of questions where it is commiting errors . Also suggest some improvent techiniques based on ypur analysis . also tell him whether he is improving or not based on the frequency of type  errors in past and recent  " + history,
+        contents: "Analyze the following history of errors made by the user  and provide a medium sized detailed analysis of the errors user frequently commits and how he can improve this , also tell the topics he often fails and the difficulty level of questions where it is commiting errors . Also suggest some improvent techiniques based on ypur analysis . also tell him whether he is improving or not based on the frequency of type  errors in past and recent Alo keep the response within 400 words and prober bullet points , do not ise * in response instead us numbers to improve readibility " + history,
     });
     return response.text;
 };

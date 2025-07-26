@@ -27,3 +27,12 @@
 .gutter:hover:before {
   opacity: 1;
 }
+.question-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-y: auto;
+  max-height: 60vh; /* adjust height as needed */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: black;
+}

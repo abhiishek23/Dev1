@@ -71,31 +71,33 @@ function Card3() {
   return (
     <>
       <div className="flex justify-center my-6">
-        <div className="relative flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-96">
+        <div className="relative flex flex-col bg-slate-900 shadow-sm border border-slate-700 rounded-lg w-96">
           <div className="p-4">
-            <h5 className="mb-2 text-slate-800 text-xl font-semibold">
+            <h5 className="mb-2 text-white text-xl font-semibold">
               Compare with Friends
             </h5>
-            <p className="text-slate-600 leading-normal font-light mb-4">
+            <p className="text-white leading-normal font-light mb-4">
               Compare yourself with a friend to see how you stack up.
             </p>
 
             {/* Dropdown with friends fetched from backend */}
-            <select
-              value={selectedFriend}
-              onChange={(e) => setSelectedFriend(e.target.value)}
-              className="w-full border px-2 py-2 rounded mb-3 text-sm"
-            >
-              <option value="">Select a friend</option>
-              {friends.map((friendId) => (
-                <option key={friendId} value={friendId}>
-                  {friendId}
-                </option>
-              ))}
-            </select>
+          <select
+  value={selectedFriend}
+  onChange={(e) => setSelectedFriend(e.target.value)}
+  className="w-full border border-slate-600 px-2 py-2 rounded mb-3 text-sm bg-slate-800 text-white placeholder:text-slate-400"
+>
+  <option value="" disabled hidden>
+    Select a friend
+  </option>
+  {friends.map((friendId) => (
+    <option key={friendId} value={friendId}>
+      {friendId}
+    </option>
+  ))}
+</select>
 
             <button
-              className="rounded-md bg-slate-800 py-2 px-4 w-full text-white hover:bg-slate-700"
+              className="rounded-md bg-blue-600 py-2 px-4 w-full text-white hover:bg-blue-700"
               type="button"
               onClick={handleCompare}
               disabled={loading}

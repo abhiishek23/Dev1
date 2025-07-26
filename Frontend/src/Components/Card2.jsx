@@ -40,13 +40,13 @@ const Card1 = () => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-md w-72">
+    <div className="bg-slate-900 p-4 rounded-xl shadow-md w-72 border border-slate-700">
       {/* Title */}
-      <h2 className="text-lg font-semibold mb-2">Send Friend Request</h2>
+      <h2 className="text-lg font-semibold mb-2 text-white">Send Friend Request</h2>
 
       {/* Original description */}
-      <p className="text-gray-600 text-sm mb-4">
-      Making friend will help you to compare yourself with your friend , by comparing errors ,consistency , contest performance ,approaches . 
+      <p className="text-white text-sm mb-4">
+        Making friend will help you to compare yourself with your friend , by comparing errors ,consistency , contest performance ,approaches .
       </p>
 
       {/* Input + OK Button below description */}

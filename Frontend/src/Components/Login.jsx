@@ -48,17 +48,17 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="p-6 w-full max-w-md bg-white rounded-lg shadow-md mx-auto">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+      <div className="p-8 w-full max-w-md bg-gray-800 rounded-xl shadow-2xl">
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <h1 className="text-xl font-bold mb-2 text-center">Register Here</h1>
+          <h1 className="text-2xl font-bold mb-2 text-center text-white">Register Here</h1>
 
           <input
             type="text"
             placeholder="First Name"
             value={firstname}
             onChange={(e) => setFirstname(e.target.value)}
-            className="border p-2 rounded"
+            className="bg-gray-700 text-white border border-gray-600 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -66,7 +66,7 @@ const LoginPage = () => {
             placeholder="Last Name"
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
-            className="border p-2 rounded"
+            className="bg-gray-700 text-white border border-gray-600 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -74,7 +74,7 @@ const LoginPage = () => {
             placeholder="User ID"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
-            className="border p-2 rounded"
+            className="bg-gray-700 text-white border border-gray-600 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -82,7 +82,7 @@ const LoginPage = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border p-2 rounded"
+            className="bg-gray-700 text-white border border-gray-600 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -90,12 +90,12 @@ const LoginPage = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border p-2 rounded"
+            className="bg-gray-700 text-white border border-gray-600 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <button
             type="submit"
-            className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition"
           >
             Submit
           </button>

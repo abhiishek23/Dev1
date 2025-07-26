@@ -53,29 +53,29 @@ function Card4() {
 
   return (
     <div className="flex justify-center my-6">
-      <div className="bg-white border border-gray-200 shadow rounded-lg w-96 p-4">
-        <h5 className="text-xl font-semibold text-gray-800 mb-4">Pending Friend Requests</h5>
+      <div className="bg-slate-900 border border-slate-700 shadow rounded-lg w-96 p-4">
+        <h5 className="text-xl font-semibold text-white mb-4">Pending Friend Requests</h5>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
         {pendingRequests.length === 0 ? (
-          <p className="text-sm text-gray-600">No pending requests.</p>
+          <p className="text-sm text-slate-300">No pending requests.</p>
         ) : (
           <ul className="space-y-3">
             {pendingRequests.map((fromId) => (
-              <li key={fromId} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                <span className="text-gray-700 text-sm">{fromId}</span>
+              <li key={fromId} className="flex items-center justify-between bg-slate-800 p-2 rounded">
+                <span className="text-white text-sm">{fromId}</span>
                 <div className="space-x-2">
                   <button
                     onClick={() => handleAction(fromId, "accept")}
-                    className="text-green-600 hover:text-green-800 text-sm"
+                    className="text-green-400 hover:text-green-300 text-sm"
                     title="Accept"
                   >
                     ✔
                   </button>
                   <button
                     onClick={() => handleAction(fromId, "decline")}
-                    className="text-red-600 hover:text-red-800 text-sm"
+                    className="text-red-400 hover:text-red-300 text-sm"
                     title="Decline"
                   >
                     ✖

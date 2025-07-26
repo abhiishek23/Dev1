@@ -22,13 +22,13 @@ const Table = () => {
 
   return (
     <div className="relative overflow-x-auto mt-20 px-4">
-      <h1 className="text-xl font-bold mb-4">Problem List</h1>
+      <h1 className="text-xl font-bold mb-4 text-white">Problem List</h1>
 
       {problemList.length === 0 ? (
-        <p className="text-gray-500">No problems available.</p>
+        <p className="text-slate-300">No problems available.</p>
       ) : (
-        <table className="w-full text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <table className="w-full text-sm text-left text-slate-400">
+          <thead className="text-xs text-slate-200 uppercase bg-slate-800">
             <tr>
               <th className="px-6 py-3">QUESTION NAME</th>
               <th className="px-6 py-3">QUESTION ID</th>
@@ -40,9 +40,9 @@ const Table = () => {
               <tr
                 key={index}
                 onClick={() => navigate(`/problem/${problem.ProblemID}`)}
-                className="bg-white border-b hover:bg-gray-100 cursor-pointer"
+                className="bg-slate-900 border-b border-slate-700 hover:bg-slate-800 cursor-pointer"
               >
-                <th className="px-6 py-4 font-medium">{problem.Title}</th>
+                <th className="px-6 py-4 font-medium text-white">{problem.Title}</th>
                 <td className="px-6 py-4">{problem.ProblemID}</td>
                 <td className="px-6 py-4">{problem.difficulty}</td>
               </tr>

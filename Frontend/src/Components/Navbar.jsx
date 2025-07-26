@@ -11,7 +11,7 @@ function Navbar() {
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
               <img className="h-10 w-auto" src="https://tailwindflex.com/images/logo.svg" alt="Logo" />
-              <span className="ml-2 text-xl font-bold text-white">Company</span>
+              <span className="ml-2 text-xl font-bold text-white">CodeCrux</span>
             </Link>
             <div className="hidden md:ml-10 md:flex md:space-x-10">
               <Link to="/" className="text-white hover:text-gray-300 px-3 py-2 text-sm font-medium">Home</Link>

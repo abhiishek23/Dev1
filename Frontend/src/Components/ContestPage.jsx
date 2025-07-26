@@ -37,7 +37,7 @@ const ContestPage = () => {
   };
 
   const filterContests = (type) => {
-    const now = new Date(); // Fresh timestamp per call
+    const now = new Date();
     return contestList.filter((contest) => {
       const start = new Date(contest.startTime);
       const end = new Date(contest.endTime);
@@ -51,25 +51,30 @@ const ContestPage = () => {
 
   const renderTable = (contests, title) => (
     <div className="relative overflow-x-auto mt-10">
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white tracking-wide">
+        {title}
+      </h2>
       {contests.length === 0 ? (
-        <p className="text-gray-500">No contests available.</p>
+        <p className="text-slate-300 italic">No contests available.</p>
       ) : (
-        <table className="w-full text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <table className="w-full text-sm text-left text-slate-300 border-separate border-spacing-y-2">
+          <thead className="text-xs text-slate-200 uppercase bg-slate-800">
             <tr>
-              <th className="px-6 py-3">CONTEST NAME</th>
-              <th className="px-6 py-3">CONTEST ID</th>
-              <th className="px-6 py-3">START TIME</th>
-              <th className="px-6 py-3">LENGTH</th>
-              <th className="px-6 py-3">LEADERBOARD</th>
+              <th className="px-6 py-3">Contest Name</th>
+              <th className="px-6 py-3">Contest ID</th>
+              <th className="px-6 py-3">Start Time</th>
+              <th className="px-6 py-3">Length</th>
+              <th className="px-6 py-3">Leaderboard</th>
             </tr>
           </thead>
           <tbody>
             {contests.map((contest, index) => (
-              <tr key={index} className="bg-white border-b hover:bg-gray-100">
+              <tr
+                key={index}
+                className="bg-slate-900 border border-slate-700 hover:bg-slate-800 transition"
+              >
                 <td
-                  className="px-6 py-4 font-medium cursor-pointer"
+                  className="px-6 py-4 font-medium text-white cursor-pointer hover:underline"
                   onClick={() => navigate(`/contest/${contest.contestId}`)}
                 >
                   {contest.contestName}
@@ -91,7 +96,7 @@ const ContestPage = () => {
                     onClick={() =>
                       fetchLeaderboard(contest.contestId, contest.contestName)
                     }
-                    className="text-blue-600 underline"
+                    className="text-blue-400 underline hover:text-blue-300"
                   >
                     Leaderboard
                   </button>
@@ -105,32 +110,34 @@ const ContestPage = () => {
   );
 
   return (
-    <div className="pt-20 px-4">
-      <h1 className="text-xl font-bold">All Contests</h1>
+    <div className="pt-24 px-6 text-white min-h-screen bg-slate-950">
+      <h1 className="text-2xl font-bold mb-6 text-center tracking-wide">
+        All Contests
+      </h1>
 
       {renderTable(filterContests("ongoing"), "Ongoing Contests")}
       {renderTable(filterContests("upcoming"), "Upcoming Contests")}
       {renderTable(filterContests("past"), "Past Contests")}
 
       {showLeaderboard && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex flex-col items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div className="bg-slate-900 text-slate-200 p-6 rounded-lg w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto shadow-lg">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-2xl font-bold tracking-wide">
                 Leaderboard - {currentContestName}
               </h2>
               <button
-                className="text-red-500 font-bold text-xl"
+                className="text-red-400 font-bold text-2xl hover:text-red-500"
                 onClick={() => setShowLeaderboard(false)}
               >
                 ✕
               </button>
             </div>
             {leaderboardData.length === 0 ? (
-              <p>No leaderboard data available.</p>
+              <p className="italic text-slate-400">No leaderboard data available.</p>
             ) : (
-              <table className="w-full text-sm text-left text-gray-500">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-100">
+              <table className="w-full text-sm text-left text-slate-300 border-separate border-spacing-y-2">
+                <thead className="text-xs text-slate-200 uppercase bg-slate-700">
                   <tr>
                     <th className="px-4 py-2">Participant ID</th>
                     <th className="px-4 py-2">Total Score</th>
@@ -139,7 +146,7 @@ const ContestPage = () => {
                 </thead>
                 <tbody>
                   {leaderboardData.map((entry, idx) => (
-                    <tr key={idx} className="bg-white border-b">
+                    <tr key={idx} className="bg-slate-800 border border-slate-600">
                       <td className="px-4 py-2">{entry.participantId}</td>
                       <td className="px-4 py-2">{entry.totalScore}</td>
                       <td className="px-4 py-2">

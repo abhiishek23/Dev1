@@ -27,6 +27,7 @@ Please respond with:
 1. Who appears to perform better and why.
 2. Key weaknesses or repeated mistakes in each user.
 3. Actionable improvement suggestions for the weaker user.
+Also make sure to give the response wothing 300 words , and do not use * instead use numbers to make to response more readable 
 `;
 
   const response = await ai.models.generateContent({

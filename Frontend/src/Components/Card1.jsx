@@ -49,17 +49,17 @@ function Card1() {
   return (
     <>
       <div className="flex justify-center my-6">
-        <div className="relative flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-96">
+        <div className="relative flex flex-col bg-slate-900 shadow-sm border border-slate-700 rounded-lg w-96">
           <div className="p-4">
-            <h5 className="mb-2 text-slate-800 text-xl font-semibold">
+            <h5 className="mb-2 text-white text-xl font-semibold">
               BugTracker+: Your Personal Coding Error Analyst
             </h5>
-            <p className="text-slate-600 leading-normal font-light">
+            <p className="text-white leading-normal font-light">
               It analyzes your past code errors to highlight common mistakes, weak topics, and difficulty levels you struggle with.
             </p>
 
             <button
-              className="rounded-md bg-slate-800 py-2 px-4 mt-6 text-white hover:bg-slate-700"
+              className="rounded-md bg-blue-600 hover:bg-blue-700 py-2 px-4 mt-6 text-white"
               type="button"
               onClick={handleGetReview}
               disabled={loading}
