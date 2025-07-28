@@ -1,0 +1,45 @@
+
+
+services:
+  backend:
+    build: ./backend
+    env_file:
+      - ./backend/.env
+    container_name: backend-of-project
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+    working_dir: /app/Backend
+    command: node index.js
+
+  compiler:
+    build: ./compiler
+    container_name: compiler-2
+    ports:
+      - "7000:7000"
+    volumes:
+      - .:/app
+    working_dir: /app/compiler
+    command: node index.js
+    depends_on:
+      - backend
+
+
+# services:
+#   backend:
+#     image: 196257796090.dkr.ecr.eu-north-1.amazonaws.com/dev_season-backend
+#     ports:
+#       - "4000:4000"
+#     restart: always
+
+#   compiler:
+#     image: 196257796090.dkr.ecr.eu-north-1.amazonaws.com/dev_season-compiler
+#     ports:
+#       - "7000:7000"
+#     depends_on:
+#       - backend
+#     restart: always
+
+
+

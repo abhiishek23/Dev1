@@ -82,7 +82,7 @@ const CodingPage = () => {
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/problem/${problemID}`);
+        const response = await axios.get(`http://13.60.230.88:4000/api/problem/${problemID}`);
         if (response.data.success) {
           setProblemData(response.data.problem);
         }
@@ -108,7 +108,7 @@ const handleSubmit = async () => {
   try {
     setLoadingAction("submit");
 
-    const res = await axios.post("http://localhost:7000/submit-contest", {
+    const res = await axios.post("http://13.60.230.88:7000/submit-contest", {
       language: languageMap[language],
       code,
       input: "",
@@ -153,7 +153,7 @@ const handleRun = async () => {
   try {
     setLoadingAction("run");
 
-    const res = await axios.post("http://localhost:7000/run", {
+    const res = await axios.post("http://13.60.230.88:7000/run", {
       language: languageMap[language],
       code,
       input: "",
@@ -186,7 +186,7 @@ const handleRun = async () => {
   const handleAIReview = async () => {
     try {
       setLoadingAction("ai");
-      const res = await axios.post("http://localhost:4000/ai", { code });
+      const res = await axios.post("http://13.60.230.88:4000/ai", { code });
       setAiResponse(res.data.review || "AI Review Success");
       setActiveTab("AI Review Result");
     } catch (err) {
@@ -319,7 +319,7 @@ const handleRun = async () => {
 
     try {
       setLoadingAction("approach"); // Disable submit button
-      const response = await axios.post("http://localhost:4000/review-approach", {
+      const response = await axios.post("http://13.60.230.88:4000/review-approach", {
         approach: approachText,
         ProblemID: problemData.ProblemID,
       });

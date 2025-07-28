@@ -21,7 +21,7 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:4000/register", {
+      const response = await axios.post("http://13.60.230.88:4000/register", {
         firstname,
         lastname,
         email,

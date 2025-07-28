@@ -15,7 +15,7 @@ function Card4() {
       if (!user?.userId) return;
 
       try {
-        const response = await axios.get(`http://localhost:4000/user/${user.userId}/friendRequests`);
+        const response = await axios.get(`http://13.60.230.88:4000/user/${user.userId}/friendRequests`);
         if (response.data.success) {
           setPendingRequests(response.data.friendRequests || []);
         } else {
@@ -33,8 +33,8 @@ function Card4() {
   const handleAction = async (fromUserId, action) => {
     const url =
       action === "accept"
-        ? "http://localhost:4000/friend-request/accept"
-        : "http://localhost:4000/friend-request/decline";
+        ? "http://13.60.230.88:4000/friend-request/accept"
+        : "http://13.60.230.88:4000/friend-request/decline";
 
     try {
       await axios.post(url, {

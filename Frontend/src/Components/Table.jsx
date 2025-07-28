@@ -9,7 +9,7 @@ const Table = () => {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/problems");
+        const response = await axios.get("http://13.60.230.88:4000/api/problems");
         console.log("API Response:", response.data); // ✅ Debug
         setProblemList(response.data.problems);
       } catch (error) {

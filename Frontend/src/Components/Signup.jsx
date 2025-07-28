@@ -19,7 +19,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:4000/signup", {
+      const response = await axios.post("http://13.60.230.88:4000/signup", {
         email,
         userId,
         password,

@@ -18,7 +18,7 @@ const Card1 = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/friend-request/send", {
+      const res = await fetch("http://13.60.230.88:4000/friend-request/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

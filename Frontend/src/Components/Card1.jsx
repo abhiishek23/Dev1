@@ -26,7 +26,7 @@ function Card1() {
     setReview("");
 
     try {
-      const response = await axios.post("http://localhost:4000/errorAnalysis", {
+      const response = await axios.post("http://13.60.230.88:4000/errorAnalysis", {
         userId: user.userId,
       });
 
