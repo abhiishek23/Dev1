@@ -11,7 +11,7 @@ const ContestDetailPage = () => {
   useEffect(() => {
     const fetchContestDetails = async () => {
       try {
-        const res = await axios.get(`http://13.60.230.88:4000/api/contest/${contestId}`);
+        const res = await axios.get(`http://51.21.190.160:4000/api/contest/${contestId}`);
         setContest(res.data.contest);
         setProblemList(res.data.problemDetails);
       } catch (error) {

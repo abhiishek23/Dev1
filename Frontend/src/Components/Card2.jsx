@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-const Card1 = () => {
+const Card2 = () => {
   const [toUserId, setToUserId] = useState("");
   const [responseMessage, setResponseMessage] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -18,7 +18,7 @@ const Card1 = () => {
     }
 
     try {
-      const res = await fetch("http://13.60.230.88:4000/friend-request/send", {
+      const res = await fetch("http://51.21.190.160:4000/friend-request/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,4 +76,4 @@ const Card1 = () => {
   );
 };
 
-export default Card1;
+export default Card2;

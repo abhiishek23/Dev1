@@ -15,7 +15,7 @@ function Card4() {
       if (!user?.userId) return;
 
       try {
-        const response = await axios.get(`http://13.60.230.88:4000/user/${user.userId}/friendRequests`);
+        const response = await axios.get(`http://51.21.190.160:4000/user/${user.userId}/friendRequests`);
         if (response.data.success) {
           setPendingRequests(response.data.friendRequests || []);
         } else {

@@ -13,7 +13,7 @@ const ContestPage = () => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await axios.get("http://13.60.230.88:4000/api/contests");
+        const response = await axios.get("http://51.21.190.160:4000/api/contests");
         setContestList(response.data.contests);
       } catch (error) {
         console.error("Error fetching contests:", error);
@@ -26,7 +26,7 @@ const ContestPage = () => {
   const fetchLeaderboard = async (contestId, contestName) => {
     try {
       const response = await axios.get(
-        `http://13.60.230.88:4000/contest/${contestId}/leaderboard`
+        `http://51.21.190.160:4000/contest/${contestId}/leaderboard`
       );
       setLeaderboardData(response.data.leaderboard);
       setCurrentContestName(contestName);

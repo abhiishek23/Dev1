@@ -21,7 +21,7 @@ function Card3() {
       if (!user?.userId) return;
 
       try {
-        const response = await axios.get(`http://13.60.230.88:4000/user/${user.userId}/friends`);
+        const response = await axios.get(`http://51.21.190.160:4000/user/${user.userId}/friends`);
         if (response.data.success) {
           setFriends(response.data.friends || []);
         } else {
@@ -49,7 +49,7 @@ function Card3() {
     setAnalysis("");
 
     try {
-      const response = await axios.post("http://13.60.230.88:4000/compare", {
+      const response = await axios.post("http://51.21.190.160:4000/compare", {
         userId1: user.userId,
         userId2: selectedFriend,
       });
